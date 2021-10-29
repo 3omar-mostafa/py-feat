@@ -1616,13 +1616,14 @@ class Fex(DataFrame):
         inputs = self.input().unique()
         all_axes = []
         for imagefile in inputs:
-            f, axes = plt.subplots(1, 3, figsize=(15, 7))
+            f, axes = plt.subplots(1, 2, figsize=(20, 20), gridspec_kw={'width_ratios': [4, 1]})
             ax = axes[0]
             try:
                 if os.path.exists(imagefile):
                     color = "w"
                     # draw base image
                     im = Image.open(imagefile)
+                    ax.axis("off")
                     ax.imshow(im)
                     image_exists = True
                 else:
@@ -1700,17 +1701,11 @@ class Fex(DataFrame):
                 ax.set(ylim=ax.get_ylim()[::-1])
                 ax.set_aspect("equal", "box")
 
-            # plot AUs
-            sub_data.aus().T.plot(kind="barh", ax=axes[1])
+            # plot emotions
+            sub_data.emotions().T.plot(kind="barh", ax=axes[1])
             axes[1].invert_yaxis()
             axes[1].get_legend().remove()
-            axes[1].set(xlim=[0, 1.1], title="Action Units")
-
-            # plot emotions
-            sub_data.emotions().T.plot(kind="barh", ax=axes[2])
-            axes[2].invert_yaxis()
-            axes[2].get_legend().remove()
-            axes[2].set(xlim=[0, 1.1], title="Emotions")
+            axes[1].set(xlim=[0, 1.1], title="Emotions")
 
             plt.tight_layout()
             plt.show()
